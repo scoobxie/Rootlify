@@ -19,10 +19,10 @@ app.use(express.json());
 // ──── ୨୧ ──── MMO ──── ୨୧ ────
 
 // SOCKET.IO (MMO MAGIC)
-const server = http.createServer(app); // Creăm serverul HTTP explicit
+const server = http.createServer(app); // Creates HTTP server
 const io = new Server(server, {
     cors: {
-        origin: "*", // Permitem conexiunea de oriunde (esențial pt dev)
+        origin: "*", // Allows connection from anywhere
         methods: ["GET", "POST"]
     }
 });
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
 // 1. When entering the park (JOIN)
     socket.on('join-park', (data) => {
         
-        // 👻 GHOST BUSTING: Ștergem orice alt jucător vechi cu același nume
+        // Delete any old player with the same name (removes ghosts)
         for (const [id, player] of Object.entries(onlinePlayers)) {
             if (player.username === data.username) {
                 console.log(`👻 Removing ghost of ${player.username} (ID: ${id})`);
@@ -51,7 +51,9 @@ io.on('connection', (socket) => {
             y: data.y || 400,
             username: data.username || "Gardener",
             characterLook: data.characterLook || {},
-            isVeteran: data.isVeteran || false
+            coins: data.coins || 0,
+            isVeteran: data.isVeteran || false,
+            isBanned: data.isBanned || false
         };
         
         console.log(`👋 ${data.username} joined the park.`);
@@ -221,8 +223,14 @@ app.post('/api/login', async (req, res) => {
 // ★ SAVE GAME ★
 app.post('/api/save', verifyToken, async (req, res) => {
   try {
-    const { email, gameState } = req.body;
-    await User.findOneAndUpdate({ email }, { gameSave: gameState });
+    const { email, gameState, coins } = req.body;
+    
+    const updateData = { gameSave: gameState };
+    if (coins !== undefined) {
+        updateData.coins = coins;
+    }
+    
+    await User.findOneAndUpdate({ email }, updateData);
     res.status(200).json({ message: "Game saved!" });
   } catch (err) {
     res.status(500).json({ error: err.message });

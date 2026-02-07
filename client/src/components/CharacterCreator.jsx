@@ -55,7 +55,7 @@ const BOY_OUTFITS = [
 
 
 // ⬇️ AICI ERA PROBLEMA: Am adăugat currentLook și onClose
-const CharacterCreator = ({ gender, currentLook, onSave, onClose, userCoins }) => {
+const CharacterCreator = ({ gender, currentLook, onSave, onClose, coins }) => {
   
   const isBoy = gender === 'boy';
   const currentSkins = isBoy ? BOY_SKINS : GIRL_SKINS;
@@ -89,7 +89,7 @@ const CharacterCreator = ({ gender, currentLook, onSave, onClose, userCoins }) =
     <div className="creator-overlay">
       
        <div className="creator-coins-display">
-            Coins: {userCoins || 0}
+            Coins: {coins || 0}
         </div>
 
       <div className="creator-window">

@@ -502,6 +502,7 @@ socket.on("update_players", (serverPlayers) => {
   // Inventarul TĂU
   const [water, setWater] = useState(10); 
   const [nutrients, setNutrients] = useState(10);
+  const [coins, setCoins] = useState(0);
   
   // Starea PLANTEI - bazat pe tipul de plantă (folosește callback pentru timing corect)
   const [plant, setPlant] = useState(() => ({
@@ -824,6 +825,7 @@ socket.on("update_players", (serverPlayers) => {
               setEnergy(cloudSave.energy ?? 2);
               setPlant(cloudSave.plant || plant);
               setPlantType(cloudSave.plantHeads || []);
+              setCoins(cloudSave.coins || 0);
               
               // Load clothes from Cloud
               if (cloudSave.characterLook && cloudSave.characterLook.skin) {
@@ -863,7 +865,7 @@ socket.on("update_players", (serverPlayers) => {
       
       const gameState = { 
         day, water, nutrients, energy, plant, plantHeads, timeOfDay, weatherCalendar, moonDayOffset,
-        plantConsumptionRate, difficultyLevel, characterLook, plantTypeKey: localStorage.getItem('currentPlantType')
+        plantConsumptionRate, difficultyLevel, characterLook, coins: coins, plantTypeKey: localStorage.getItem('currentPlantType')
       };
 
       // 🟢 NO localStorage here! (Prevents Ghost Data)
@@ -880,12 +882,13 @@ socket.on("update_players", (serverPlayers) => {
         },
         body: JSON.stringify({ 
           email: user.email, 
-          gameState: gameState 
+          gameState: gameState,
+          coins: coins
         })
       }).catch(err => console.warn("☁️ Save skipped:", err));
     }
     // ⚠️ 'isLoading' must be in the array below
-  }, [day, water, nutrients, energy, plant, timeOfDay, viewState, plantConsumptionRate, difficultyLevel, user, isLoading, characterLook, plantType]);
+  }, [day, water, nutrients, energy, plant, timeOfDay, viewState, plantConsumptionRate, difficultyLevel, user, isLoading, characterLook, coins, plantType]);
   
   // Aplicăm tema (Zi/Noapte) pe body
   useEffect(() => {
@@ -1919,15 +1922,17 @@ socket.on("update_players", (serverPlayers) => {
     }
   };
 
-// NEW FUNCTION: Send save data to backend
-const saveToCloud = async () => {
+// Send save data to backend
+const saveToCloud = async (newCoins = null) => {
   if (!user || !user.email) return; // Don't save if not logged in
+
+  const coinsToSave = newCoins !== null ? newCoins : coins;
 
   const gameState = { 
     day, water, nutrients, energy, plant, timeOfDay,
-    plantConsumptionRate, difficultyLevel, plantTypeKey: localStorage.getItem('currentPlantType')
+    plantConsumptionRate, difficultyLevel, coins: coinsToSave, plantTypeKey: localStorage.getItem('currentPlantType')
   };
-
+  
   try {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     
@@ -1941,7 +1946,8 @@ const saveToCloud = async () => {
       },
       body: JSON.stringify({ 
         email: user.email, 
-        gameState: gameState 
+        gameState: gameState,
+        coins: coinsToSave
       })
     });
     console.log("☁️ Cloud Save Complete");
@@ -1952,18 +1958,20 @@ const saveToCloud = async () => {
 
   const startNewDay = () => {
     const newDay = day + 1;
+    const dailyReward = 25;
+    const updatedCoins = (parseInt(coins) || 0) + dailyReward;
     
     // VICTORY CHECK - Day 30 completed!
 if (newDay > 30) {
       setGameView('victory');
       playSound('success');
 
-      // LOCAL UPDATE - veteran badge
-      const updatedUser = { ...user, isVeteran: true };
+      // LOCAL UPDATE
+      const updatedUser = { ...user, isVeteran: true, coins: updatedCoins };
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
-      // SERVER UPDATE - isVeteran
+      // SERVER UPDATE
       const token = localStorage.getItem('token');
       const apiUrl = import.meta.env.VITE_API_URL || 'https://plant-game.onrender.com';
       
@@ -1973,6 +1981,7 @@ if (newDay > 30) {
         body: JSON.stringify({ 
           email: user.email, 
           isVeteran: true, 
+           coins: updatedCoins,
           gameState: { 
              day: 30, 
              plant, 
@@ -1988,7 +1997,13 @@ if (newDay > 30) {
       return;
     }
     
+    
     setTimeOfDay('morning');
+    setCoins(updatedCoins);
+    addLog(`☀️ Day ${newDay} reached! Gained ${dailyReward} coins for surviving.`);
+
+    saveToCloud(updatedCoins);
+    
     
     // 🌻 SUNFLOWER ABILITIES - Morning bonuses
     if (plantType.photosynthesis) {
@@ -2416,9 +2431,10 @@ const restart = async (force = false) => {
       plantConsumptionRate: 1, 
       difficultyLevel: 1,
       
-      // Add the saved info
+      
       characterLook: currentOutfit,  
       isVeteran: isVeteranNow,
+      coins: coins,
       plantTypeKey: randomType
     };
 
@@ -2431,7 +2447,7 @@ const restart = async (force = false) => {
         await fetch(`${apiUrl}/api/save`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ email: user.email, gameState: freshState })
+          body: JSON.stringify({ email: user.email, gameState: freshState, coins: coins })
         });
       } catch (e) { console.error("Cloud wipe failed:", e); }
     }
@@ -2525,6 +2541,7 @@ if (viewState === 'login') {
               setNutrients(u.gameSave.nutrients !== undefined ? u.gameSave.nutrients : 10);
               setEnergy(u.gameSave.energy !== undefined ? u.gameSave.energy : 2);
               setPlant(u.gameSave.plant || plant);
+              setCoins(u.gameSave.coins || 0);
 
               if (u.gameSave.timeOfDay) setTimeOfDay(u.gameSave.timeOfDay);
               if (u.gameSave.difficultyLevel) setDifficultyLevel(u.gameSave.difficultyLevel);
@@ -2613,6 +2630,7 @@ if (user && showCreator) {
     <CharacterCreator 
         gender={user.character} 
         currentLook={characterLook} 
+        coins={coins}
         
         onSave={(newLook) => {
             setCharacterLook(newLook);
