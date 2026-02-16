@@ -12,7 +12,9 @@ const sfx = {
   footstep: new Audio('/assets/audio/grass-footstep.mp3'),
   waterPlant: new Audio('/assets/audio/water-drip.mp3'),
   fertilizePlant: new Audio('/assets/audio/feed-plant.mp3'),
-  healPlant: new Audio('/assets/audio/heal-up.mp3')
+  healPlant: new Audio('/assets/audio/heal-up.mp3'),
+  splash: new Audio('/assets/audio/splash.wav'),
+  fishing: new Audio('/assets/audio/fishing.wav')
 };
 
 let currentRadio = null;
@@ -38,6 +40,8 @@ export const preloadRoomSounds = () => {
 export const preloadParkSounds = () => {
   radioTracks.forEach(track => loadAudio(track));
   loadAudio('/assets/audio/footstep.wav');
+  loadAudio('/assets/audio/splash.wav');
+  loadAudio('/assets/audio/fishing.wav');
 };
 
 export const playSFX = (name) => {
@@ -50,7 +54,7 @@ export const startParkRadio = () => {
   if (currentRadio || isMuted) return;
   
   currentRadio = new Audio(radioTracks[trackIndex]);
-  currentRadio.volume = 0.3;
+  currentRadio.volume = 0.1;
   
   currentRadio.onended = () => {
     trackIndex = (trackIndex + 1) % radioTracks.length;

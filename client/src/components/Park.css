@@ -1,5 +1,5 @@
 /* =========================================================
-   🌸 MISTRIA REWORK - ORGANIC & SEAMLESS
+   🏰 HAND-DRAWN GARDEN 🎣
    ========================================================= */
 
 .park-container {
@@ -9,119 +9,48 @@
   top: 0; left: 0;
   overflow: hidden;
   z-index: 100;
-  /* Iarbă fără "buline" - folosim un gradient de zgomot fin pentru realism */
-  background-color: #a8e6cf;
-  background-image: 
-    radial-gradient(at 20% 30%, #b8f2e6 0%, transparent 50%),
-    radial-gradient(at 80% 70%, #95d5be 0%, transparent 50%);
+  /* Fallback background colour */
+  background-color: #8bbfa3; 
 }
 
-/* --- TEXTURĂ DE IARBĂ (Mici smocuri de iarbă pixelate) --- */
-.grass-patch {
+/* --- NEW IMAGE LAYER SYSTEM --- */
+/* Base class for all full-screen image layers */
+.map-layer {
   position: absolute;
-  width: 4px; height: 8px;
-  background: #81c784;
-  border-radius: 2px;
-  box-shadow: 6px -4px 0 #81c784, -4px -2px 0 #81c784;
-  opacity: 0.6;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* Ensures it scales to fit the screen */
+  pointer-events: none; /* Lets clicks pass through the transparent parts! */
 }
 
-/* --- COPACUL CHERRY BLOSSOM (Pufos și Integrat) --- */
-.mistria-tree {
+/* Specific Z-Indexes for layering */
+.bg-base { z-index: 1; }
+.bg-walkable { z-index: 2; }
+
+/* The decor layers */
+.decor-water { z-index: 10; }
+.decor-pool-stairs { z-index: 11; }
+.decor-pool-jump { z-index: 12; }
+.decor-docks { z-index: 13; }
+.decor-picnic { z-index: 14; }
+.decor-tree { z-index: 900; } 
+.decor-castle { z-index: 900; } 
+
+/* Invisible Hitboxes for interactions */
+.hitbox {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  cursor: pointer;
+  z-index: 999; /* Always on top so they can be clicked */
 }
 
-.tree-shadow-floor {
-  position: absolute;
-  bottom: -5px;
-  width: 120px; height: 40px;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  filter: blur(8px);
-  z-index: -1;
-}
 
-.mistria-leaves {
-  width: 160px; height: 150px;
-  background: #ffcce1;
-  /* Formă de nor pufos prin Border-Radius neregulat */
-  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-  position: relative;
-  z-index: 2;
-  border: 4px solid #ff99cc;
-  /* Umbrele astea creează volumul de "Mistria" */
-  box-shadow: 
-    inset -20px -20px 0 rgba(244, 143, 177, 0.5),
-    20px 20px 40px rgba(0,0,0,0.05);
-}
+/* =========================================================
+   💬 MMO UI & CHAT
+   ========================================================= */
 
-.mistria-trunk {
-  width: 34px; height: 60px;
-  background: #795548;
-  margin-top: -30px; /* Trunchiul intră mult sub frunze */
-  border-radius: 8px 8px 4px 4px;
-  box-shadow: inset -10px 0 0 #5d4037;
-  border: 4px solid #3e2723;
-  z-index: 1;
-}
-
-/* --- LACUL (Formă de bazin natural) --- */
-.mistria-lake {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px; height: 320px;
-  background: #b3e5fc;
-  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%; /* Formă organică */
-  border: 12px solid #ffe3e5;
-  box-shadow: 
-    inset 0 10px 30px rgba(0,0,0,0.1),
-    0 15px 0 #95d5be; /* Marginea care îl "îngroapă" în iarbă */
-  overflow: hidden;
-}
-
-.water-shimmer {
-  position: absolute;
-  width: 100%; height: 100%;
-  background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.1) 42px, transparent 44px);
-  animation: waterMove 10s linear infinite;
-}
-
-@keyframes waterMove {
-  from { transform: translateX(-100px); }
-  to { transform: translateX(100px); }
-}
-
-/* --- PICNIC (Perspectivă 2.5D) --- */
-.mistria-picnic {
-  position: absolute;
-  width: 180px; height: 100px;
-  background: #ff80ab;
-  background-image: 
-    linear-gradient(white 2px, transparent 2px),
-    linear-gradient(90deg, white 2px, transparent 2px);
-  background-size: 30px 30px;
-  border-radius: 20% 20% 10% 10% / 10% 10% 5% 5%; /* Înclinație de perspectivă */
-  border: 5px solid #f06292;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-}
-
-/* --- FLORI (Smocuri mici de culoare) --- */
-.mistria-flower {
-  position: absolute;
-  width: 10px; height: 10px;
-  background: #f48fb1;
-  border-radius: 50% 50% 0 50%;
-  box-shadow: 8px -2px 0 #fff, 4px 6px 0 #ff80ab;
-  transform: rotate(15deg);
-}
-
-/* --- MMO UI & CHAT --- */
-
-/* Containerul Input-ului (Jos Centru) */
+/* Chat Input Container */
 .chat-input-container {
   position: fixed;
   bottom: 30px;
@@ -131,7 +60,7 @@
   pointer-events: auto; /* IMPORTANT: Ca să poți da click */
 }
 
-/* Bara de scris efectivă */
+/* ChatInput Field */
 .chat-input-field {
   padding: 12px 25px;
   border-radius: 30px;
