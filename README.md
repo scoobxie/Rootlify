@@ -1,4 +1,4 @@
-# 🌱 Web Plant Game
+# 🌱 Rootlify
 ### *A Pixel Art Survival Roguelike Game*
 
 ![MERN Stack](https://img.shields.io/badge/MERN-Stack-000000?style=for-the-badge&logo=react)
