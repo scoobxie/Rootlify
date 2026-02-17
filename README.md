@@ -1,30 +1,33 @@
 # 🌱 Rootlify
-### *A Pixel Art Survival Roguelike Game*
+### *A Pixel Art Survival Roguelike MMO Game*
 
 ![MERN Stack](https://img.shields.io/badge/MERN-Stack-000000?style=for-the-badge&logo=react)
 ![Status](https://img.shields.io/badge/Status-Live-success?style=for-the-badge)
 ![Art](https://img.shields.io/badge/Art-Resprite-ff69b4?style=for-the-badge&logo=aseprite&logoColor=white)
 
-## 🎮 PLAY NOW
-**Click here to play:** [ **🔗 https://plant-game-client.onrender.com** ]
+## 🎮 PLAY NOW 
+**Click here to play:** [ **🔗 https://rootlify.onrender.com** ]
 
-> **"Adopt a digital plant, fight off pests and survive the seasons!"** 🌻⚔️
+> **Survive by keeping your plants alive and hang out in the MMO garden. 🌳🏰🌊** 
 
 ---
 
 ## ✨ Features
-* **🌾 Grow:** Manage **Water**, **Nutrients**, and **Energy** to survive a 30-day cycle.
-* **⚔️ Fight:** Strategic turn-based combat against night-time enemies.
-* **☁️ Save:** Reliable cloud saving - your progress persists via **MongoDB Atlas**.
+* **☀️ Grow:** Manage the plant's water & nutrients as well as your energy.
 * **⛈️ Survive:** Adapt to dynamic weather and natural disasters.
+* **⚔️ Fight:** Strategic turn-based combat against enemies.
+* **🌊 Social:** Visit the MMO Garden to chat and swim with others.
+* **🌳 Relax:** Go fishing or have a picnic to decompress from the survival grind.
+* **☁️ Save:** Reliable cloud saving - your progress persists via **MongoDB Atlas**.
 
 ---
 
 ## 🕹️ How to Play
-* **Care:** Spend Energy to optimize Hydration (Water) and Soil Quality (Fertilizers) to prevent plant decay.
-* **Explore:** Send your character on **Expeditions** to gather rare resources.
-* **Defend:** Use your plant's unique damage types (**Pierce, Bite, Beam**) to hit enemy weaknesses.
-* **Win:** Survive the full **30-Day** Simulation. Completion is not a guarantee; it requires precise resource allocation and tactical mastery of the dynamic weather cycles.
+* **Care:** Spend your energy wisely to optimize hydration and soil quality to prevent plant decay.
+* **Explore:** Send your character on expeditions to gather rare resources.
+* **Unwind:** Visit the communal garden to chat, fish, eat, and swim with other players in real time.
+* **Defend:** Use your plant's unique damage types to hit enemy weaknesses.
+* **Win:** Survive the full **30-Day** Simulation.
 
 ---
 
