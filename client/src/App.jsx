@@ -708,6 +708,29 @@ socket.on("update_players", (serverPlayers) => {
       console.log('🌱 First plant head created:', firstHead.name);
     }
   }, [plantType, viewState]);
+
+  // 🛠️ SAVE REPAIR
+  useEffect(() => {
+    if (plantHeads.length > 0) {
+      let needsFix = false;
+      
+      const fixedHeads = plantHeads.map(head => {
+        // If the plant is missing its image data...
+        if (!head.plantTypeData) {
+          needsFix = true;
+          // Find the correct image data from your master dictionary using the plant's name
+          const matchedType = Object.values(plantTypes).find(pt => pt.name === head.name);
+          return { ...head, plantTypeData: matchedType };
+        }
+        return head;
+      });
+
+      if (needsFix) {
+        setPlantHeads(fixedHeads);
+        console.log("🛠️ Repaired old plant save data!");
+      }
+    }
+  }, [plantHeads]);
   
   // Add new plant head every 5 days
   useEffect(() => {
@@ -2926,6 +2949,7 @@ position: 'absolute',
   const myData = { 
     username: user.username, 
     characterLook: characterLook, 
+    plantHeads: plantHeads,
     isVeteran: user?.isVeteran || day >= 30,
     x: 400,
     y: 400

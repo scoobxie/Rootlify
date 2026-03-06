@@ -331,6 +331,25 @@ const handleJumpPool = (e) => {
                             pointerEvents: 'auto', cursor: currentlySwimming ? 'pointer' : 'default'
                         }}>
 
+                        {/* Trailing Plants */}
+                        {p.plantHeads && p.plantHeads.map((head, idx) => (
+                            <img 
+                                key={head.id || idx}
+                                src={head.image || head.sprite || head.plantTypeData?.image || '/assets/mutations/sunflower.mutation.png'} 
+                                alt="Follower Plant"
+                                style={{
+                                    position: 'absolute',
+                                    left: p.direction === 'left' ? `${50 + (idx * 30)}px` : `-${30 + (idx * 30)}px`,
+                                    bottom: '10px',
+                                    width: '70px',
+                                    height: 'auto',
+                                    imageRendering: 'pixelated',
+                                    transition: 'left 0.5s ease',
+                                    zIndex: -1
+                                }}
+                            />
+                        ))}
+
                         {p.chatMessage && (
                             <div style={{ position: 'absolute', bottom: '100%', marginBottom: '10px', background: '#fff0f5', border: '3px solid #ff80ab', padding: '5px 12px', borderRadius: '15px', fontFamily: 'VT323', fontSize: '1.2rem', whiteSpace: 'nowrap', zIndex: 100, color: '#880e4f' }}>
                                 {p.chatMessage}

@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
             y: data.y || 400,
             username: data.username || "Gardener",
             characterLook: data.characterLook || {},
+            plantHeads: data.plantHeads || [],
             coins: data.coins || 0,
             isVeteran: data.isVeteran || false,
             isBanned: data.isBanned || false
