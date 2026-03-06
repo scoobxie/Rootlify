@@ -106,3 +106,13 @@
   from { top: -50px; opacity: 0; }
   to { top: 30px; opacity: 1; }
 }
+
+/* PLANT HOPPING ANIMATION  */
+@keyframes plantHop {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-2px) rotate(2deg); }
+}
+
+.plant-hopping {
+  animation: plantHop 0.4s infinite;
+}

@@ -321,6 +321,10 @@ const handleJumpPool = (e) => {
                     clipPath: currentlySwimming ? `inset(0 0 ${swimDepth}% 0)` : 'inset(0 0 0% 0)'
                 };
 
+                const plantSwimStyle = {
+                    clipPath: currentlySwimming ? `inset(0 0 ${swimDepth / 2.2}% 0)` : 'inset(0 0 0% 0)'
+                };
+
                 return (
                     <div key={p.id} onClick={(e) => handlePlayerClick(e, p)} style={{
                             position: 'absolute', left: p.x, top: p.y,
@@ -337,19 +341,26 @@ const handleJumpPool = (e) => {
                                 key={head.id || idx}
                                 src={head.image || head.sprite || head.plantTypeData?.image || '/assets/mutations/sunflower.mutation.png'} 
                                 alt="Follower Plant"
+                                
+                                // HOP WHEN THE PLAYER WALKS
+                                className={p.isMoving ? 'plant-hopping' : ''} 
+                                
                                 style={{
                                     position: 'absolute',
-                                    left: p.direction === 'left' ? `${50 + (idx * 30)}px` : `-${30 + (idx * 30)}px`,
+                                    left: p.direction === 'left' ? `${50 + (idx * 25)}px` : `-${35 + (idx * 25)}px`,
                                     bottom: '10px',
-                                    width: '70px',
+                                    width: '75px',
                                     height: 'auto',
                                     imageRendering: 'pixelated',
                                     transition: 'left 0.5s ease',
-                                    zIndex: -1
+                                    zIndex: -1,
+                                    
+                                    // 👇 NEW: CLIPS THEM UNDER THE WATER LIKE THE PLAYER
+                                    ...plantSwimStyle
                                 }}
                             />
                         ))}
-
+                   
                         {p.chatMessage && (
                             <div style={{ position: 'absolute', bottom: '100%', marginBottom: '10px', background: '#fff0f5', border: '3px solid #ff80ab', padding: '5px 12px', borderRadius: '15px', fontFamily: 'VT323', fontSize: '1.2rem', whiteSpace: 'nowrap', zIndex: 100, color: '#880e4f' }}>
                                 {p.chatMessage}
