@@ -27,6 +27,8 @@ const GIRL_OUTFITS = [
   "/assets/character/outfits/girl-outfit-preppy.png",
   "/assets/character/outfits/girl-outfit-protagonist.png",
   "/assets/character/outfits/girl-outfit-cinderella.png",
+   "/assets/character/outfits/girl-outfit-princess-pink.png",
+    "/assets/character/outfits/girl-outfit-princess-purple.png",
 ];
 
 
@@ -50,7 +52,9 @@ const BOY_OUTFITS = [
     "/assets/character/outfits/boy-outfit-brown-jacket.png",
     "/assets/character/outfits/boy-outfit-black-jacket.png",
     "/assets/character/outfits/boy-outfit-shorts.png",
-    "/assets/character/outfits/boy-outfit-vacay.png"
+    "/assets/character/outfits/boy-outfit-vacay.png",
+    "/assets/character/outfits/boy-outfit-prince.png",
+    "/assets/character/outfits/boy-outfit-prince-cape.png"
 ];
 
 
